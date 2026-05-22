@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Base : MonoBehaviour
@@ -34,9 +35,23 @@ public class Base : MonoBehaviour
 
         while (enabled)
         {
-            TrySendBot();
+            TrySendBotsMultiple();
 
             yield return wait;
+        }
+    }
+
+    private void TrySendBotsMultiple()
+    {
+        if (_spawner.TryGetFreeBotMultiple(out List<CollectorBot> bots) == false)
+            return;
+
+        foreach (CollectorBot bot in bots)
+        {
+            if (_resourceDatabase.TryRequestResource(out Resource resource) == false)
+                continue;
+
+            bot.SetTarget(resource.transform);
         }
     }
 

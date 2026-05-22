@@ -11,7 +11,7 @@ public class BotSpawner : MonoBehaviour
 
     private readonly List<CollectorBot> _collectorBots = new();
 
-    public event Action<CollectorBot> BotSpawned; 
+    public event Action<CollectorBot> BotSpawned;
 
     private void Start()
     {
@@ -35,6 +35,21 @@ public class BotSpawner : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool TryGetFreeBotMultiple(out List<CollectorBot> freeBots)
+    {
+        freeBots = new List<CollectorBot>();
+
+        foreach (CollectorBot bot in _collectorBots)
+        {
+            if (bot.IsBusy == false)
+            {
+                freeBots.Add(bot);
+            }
+        }
+
+        return freeBots.Count > 0;
     }
 
     private void SpawnBot()

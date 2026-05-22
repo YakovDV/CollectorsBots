@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4145369332635838212}
   - component: {fileID: 8968132962715760972}
   - component: {fileID: 1611092801766744854}
+  - component: {fileID: 2438336491035383974}
   - component: {fileID: 5797637637819413869}
   - component: {fileID: 3078281084898402372}
   - component: {fileID: 2514753652473686131}
@@ -105,9 +106,30 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &2438336491035383974
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4147636189171141100}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5797637637819413869
 Rigidbody:
@@ -134,7 +156,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &3078281084898402372
 MonoBehaviour:
@@ -176,4 +198,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85dbaf6af4959d445a97abf9b98fbe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pickUpDistance: 1

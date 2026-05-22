@@ -23,7 +23,7 @@ public class ResourceSpawner : MonoBehaviour
 
     private IEnumerator SpawnDelayed()
     {
-        while (true)
+        while (enabled)
         {
             WaitForSeconds wait = new(Random.Range(_minDelay, _maxDelay));
 
@@ -31,7 +31,7 @@ public class ResourceSpawner : MonoBehaviour
 
             Resource resource = _resourcePool.GetObject();
             resource.transform.SetPositionAndRotation(spawnPoint, Quaternion.identity);
-            resource.ReadyToReturn += ReturnObject;
+            resource.Consumed += ReturnObject;
 
             yield return wait;
         }
@@ -48,6 +48,6 @@ public class ResourceSpawner : MonoBehaviour
     private void ReturnObject(Resource resource)
     {
         _resourcePool.ReleaseObject(resource);
-        resource.ReadyToReturn -= ReturnObject;
+        resource.Consumed -= ReturnObject;
     }
 }

@@ -18,10 +18,7 @@ public class UniversalPool<T> : MonoBehaviour where T : MonoBehaviour
             createFunc: () => Instantiate(_prefab),
             actionOnGet: (@object) => @object.gameObject.SetActive(true),
             actionOnRelease: (@object) => @object.gameObject.SetActive(false),
-            actionOnDestroy: (@object) =>
-            {
-                Destroy(@object.gameObject);
-            },
+            actionOnDestroy: (@object) => Destroy(@object.gameObject),
             collectionCheck: true,
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize

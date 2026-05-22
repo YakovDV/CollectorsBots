@@ -5,14 +5,11 @@ public class Resource : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _particleSystem;
 
-    public bool IsPicked { get; private set; }
-
-    public event Action<Resource> ReadyToReturn;
+    public event Action<Resource> Consumed;
 
     private void OnEnable()
     {
         _particleSystem.Play();
-        IsPicked = false;
     }
 
     private void OnDisable()
@@ -20,13 +17,8 @@ public class Resource : MonoBehaviour
         _particleSystem.Stop();
     }
 
-    public void ChangePickedStatus(bool isPicked)
+    public void Consume()
     {
-        IsPicked = isPicked;
-    }
-
-    public void RequestReturn()
-    {
-        ReadyToReturn?.Invoke(this);
+        Consumed?.Invoke(this);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,43 +7,50 @@ public class BotSpawner : MonoBehaviour
     [SerializeField] private BotPool _botPool;
     [SerializeField] private Transform _spawnZone;
     [SerializeField] private BaseResourceCollector _collector;
-    [SerializeField] private BotShop _botShop;
-    [SerializeField] private int _initialBotCount = 2;
+    [SerializeField] private int _initialBotCount = 3;
 
-    public List<CollectorBot> CollectorBots { get; private set; }
+    private readonly List<CollectorBot> _collectorBots = new();
+
+    public event Action<CollectorBot> BotSpawned; 
 
     private void Start()
     {
-        CollectorBots = new List<CollectorBot>();
-
         for (int i = 0; i < _initialBotCount; i++)
         {
             SpawnBot();
         }
     }
 
-    private void OnEnable()
+    public bool TryGetFreeBot(out CollectorBot freeBot)
     {
-        _botShop.OnBotRequested += SpawnBot;
-    }
+        freeBot = null;
 
-    private void OnDisable()
-    {
-        _botShop.OnBotRequested -= SpawnBot;
+        foreach (CollectorBot bot in _collectorBots)
+        {
+            if (bot.IsBusy == false)
+            {
+                freeBot = bot;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void SpawnBot()
     {
         CollectorBot bot = _botPool.GetObject();
         bot.transform.position = CalculateRandomSpawnPoint();
-        bot.SetResourceCollector(_collector);
+        bot.SetBase(_collector.transform);
 
-        CollectorBots.Add(bot);
+        _collectorBots.Add(bot);
+
+        BotSpawned?.Invoke(bot);
     }
 
     private Vector3 CalculateRandomSpawnPoint()
     {
-        Vector3 point = new(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
+        Vector3 point = new(UnityEngine.Random.Range(-0.5f, 0.5f), 0f, UnityEngine.Random.Range(-0.5f, 0.5f));
 
         return _spawnZone.TransformPoint(point);
     }

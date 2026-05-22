@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CollectorBot : MonoBehaviour
@@ -5,7 +6,9 @@ public class CollectorBot : MonoBehaviour
     [SerializeField] private BotToTargetMover _mover;
     [SerializeField] private Picker _picker;
 
-    private BaseResourceCollector _resourceCollector;
+    private Transform _base;
+
+    public event Action<Resource> ResourceDelivered;
 
     public bool IsBusy { get; private set; }
 
@@ -33,9 +36,9 @@ public class CollectorBot : MonoBehaviour
         }
     }
 
-    public void SetResourceCollector(BaseResourceCollector resourceCollector)
+    public void SetBase(Transform @base)
     {
-        _resourceCollector = resourceCollector;
+        _base = @base;
     }
 
     private void OnTargetReached(Transform transform)
@@ -46,6 +49,7 @@ public class CollectorBot : MonoBehaviour
 
             if (_picker.PickedResource != null)
             {
+                ResourceDelivered?.Invoke(_picker.PickedResource);
                 _picker.Drop();
             }
 
@@ -54,7 +58,7 @@ public class CollectorBot : MonoBehaviour
         else if (transform.TryGetComponent(out Resource resource))
         {
             _picker.PickUp(resource);
-            _mover.SetTarget(_resourceCollector.transform);
+            _mover.SetTarget(_base.transform);
         }
     }
 }

@@ -3,14 +3,13 @@ using UnityEngine;
 
 public class ResourceDatabase : MonoBehaviour
 {
-    [SerializeField] private BaseResourceScanner[] _resourceScanners;
-
     private readonly List<Resource> _foundResources = new();
     private readonly HashSet<Resource> _busyResources = new();
+    private readonly HashSet<BaseResourceScanner> _scanners = new();
 
     private void OnEnable()
     {
-        foreach (BaseResourceScanner scanner in _resourceScanners)
+        foreach (BaseResourceScanner scanner in _scanners)
         {
             scanner.ResourceFound += OnResourceFound;
         }
@@ -18,7 +17,33 @@ public class ResourceDatabase : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (BaseResourceScanner scanner in _resourceScanners)
+        foreach (BaseResourceScanner scanner in _scanners)
+        {
+            scanner.ResourceFound -= OnResourceFound;
+        }
+    }
+
+    public void RegisterScanner(BaseResourceScanner scanner)
+    {
+        if (scanner == null)
+        {
+            return;
+        }
+
+        if (_scanners.Add(scanner))
+        {
+            scanner.ResourceFound += OnResourceFound;
+        }
+    }
+
+    public void UnregisterScanner(BaseResourceScanner scanner)
+    {
+        if (scanner == null)
+        {
+            return;
+        }
+
+        if (_scanners.Remove(scanner))
         {
             scanner.ResourceFound -= OnResourceFound;
         }

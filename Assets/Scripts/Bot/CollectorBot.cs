@@ -9,29 +9,39 @@ public class CollectorBot : MonoBehaviour
     private Transform _base;
 
     public event Action<Resource> ResourceDelivered;
+    public event Action<CollectorBot> BuildPointReached;
 
     public bool IsBusy { get; private set; }
 
     private void OnEnable()
     {
         _mover.TargetReached += OnTargetReached;
+        IsBusy = false;
     }
 
     private void OnDisable()
     {
         _mover.TargetReached -= OnTargetReached;
+        IsBusy = false;
     }
 
     public void SetTarget(Transform target)
     {
         if (IsBusy)
-        {
             return;
-        }
 
         if (target.TryGetComponent(out Resource resource))
         {
             _mover.SetTarget(resource.transform);
+            IsBusy = true;
+        }
+    }
+
+    public void SetBuildTarget(Transform target)
+    {
+        if (target.TryGetComponent(out BaseFlag baseFlag))
+        {
+            _mover.SetTarget(baseFlag.transform);
             IsBusy = true;
         }
     }
@@ -43,7 +53,12 @@ public class CollectorBot : MonoBehaviour
 
     private void OnTargetReached(Transform transform)
     {
-        if (transform.TryGetComponent<BaseResourceCollector>(out _))
+        if (transform.TryGetComponent(out Resource resource))
+        {
+            _picker.PickUp(resource);
+            _mover.SetTarget(_base.transform);
+        }
+        else if (transform.TryGetComponent<BaseResourceCollector>(out _))
         {
             IsBusy = false;
 
@@ -52,13 +67,11 @@ public class CollectorBot : MonoBehaviour
                 ResourceDelivered?.Invoke(_picker.PickedResource);
                 _picker.Drop();
             }
-
-            return;
         }
-        else if (transform.TryGetComponent(out Resource resource))
+        else if (transform.TryGetComponent<BaseFlag>(out _))
         {
-            _picker.PickUp(resource);
-            _mover.SetTarget(_base.transform);
+            IsBusy = false;
+            BuildPointReached?.Invoke(this);
         }
     }
 }

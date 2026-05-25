@@ -24,6 +24,6 @@ public class WalletView : MonoBehaviour
 
     private void UpdateValue(int value)
     {
-        _textMeshProUGUI.text = _walletName + " " + value.ToString();
+        _textMeshProUGUI.text = _walletName + " " + _wallet.Value.ToString();
     }
 }

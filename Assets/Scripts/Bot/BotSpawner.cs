@@ -7,15 +7,16 @@ public class BotSpawner : MonoBehaviour
     [SerializeField] private BotPool _botPool;
     [SerializeField] private Transform _spawnZone;
     [SerializeField] private BaseResourceCollector _collector;
-    [SerializeField] private int _initialBotCount = 3;
 
     private readonly List<CollectorBot> _collectorBots = new();
 
     public event Action<CollectorBot> BotSpawned;
 
-    private void Start()
+    public int CurrentBotsCount => _collectorBots.Count;
+
+    public void SpawnInitialBots(int count)
     {
-        for (int i = 0; i < _initialBotCount; i++)
+        for (int i = 0; i < count; i++)
         {
             SpawnBot();
         }
@@ -52,7 +53,7 @@ public class BotSpawner : MonoBehaviour
         return freeBots.Count > 0;
     }
 
-    private void SpawnBot()
+    public void SpawnBot()
     {
         CollectorBot bot = _botPool.GetObject();
         bot.transform.position = CalculateRandomSpawnPoint();
@@ -61,6 +62,47 @@ public class BotSpawner : MonoBehaviour
         _collectorBots.Add(bot);
 
         BotSpawned?.Invoke(bot);
+    }
+
+    public void SetBotPool(BotPool botPool)
+    {
+        _botPool = botPool;
+    }
+
+    public CollectorBot RemoveBot(CollectorBot bot)
+    {
+        if (bot == null)
+            return null;
+
+        _collectorBots.Remove(bot);
+
+        return bot;
+    }
+
+    public void AddBot(CollectorBot bot)
+    {
+        if (bot == null)
+            return;
+
+        if (_collectorBots.Contains(bot))
+            return;
+
+        _collectorBots.Add(bot);
+        bot.SetBase(_collector.transform);
+
+        BotSpawned?.Invoke(bot);
+    }
+
+    public List<CollectorBot> GetAllBots()
+    {
+        List<CollectorBot> bots = new List<CollectorBot>();
+
+        foreach (CollectorBot bot in _collectorBots)
+        {
+            bots.Add(bot);
+        }
+
+        return bots;
     }
 
     private Vector3 CalculateRandomSpawnPoint()

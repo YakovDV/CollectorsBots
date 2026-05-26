@@ -27,9 +27,12 @@ public class BaseEconomy : MonoBehaviour
         TrySpendResources();
     }
 
-    private void OnFlagChanged()
+    private void OnFlagChanged(FlagChangeType changeType)
     {
-        TrySpendResources();
+        if (changeType == FlagChangeType.Created)
+        {
+            TrySpendResources();
+        }
     }
 
     private void TrySpendResources()
@@ -41,10 +44,7 @@ public class BaseEconomy : MonoBehaviour
 
         if (_flagPlacer.HasFlag && _base.HasEnoughBotsToBuild)
         {
-            if (_flagPlacer.IsBaseRequested)
-            {
-                TryBuildNewBase();
-            }
+            TryBuildNewBase();
         }
         else
         {

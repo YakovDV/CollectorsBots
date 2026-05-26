@@ -59,7 +59,7 @@ public class BaseFlagPlacerHandler : MonoBehaviour
     {
         if (Physics.Raycast(ray, out RaycastHit hit, _rayDistance, _mapLayerMask))
         {
-            _selectedBase.PlaceFlag(hit.point, _selectedBase.transform.position);
+            _selectedBase.PlaceFlag(hit.point);
             _selectedBase = null;
         }
     }

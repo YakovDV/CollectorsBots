@@ -1162,6 +1162,11 @@ PrefabInstance:
       propertyPath: _minimumFlagDistance
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 2533706655799456431, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
+        type: 3}
+      propertyPath: _baseLayerMask.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 4662000832309483406, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
         type: 3}
       propertyPath: _selfInitialize

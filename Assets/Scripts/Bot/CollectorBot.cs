@@ -25,25 +25,28 @@ public class CollectorBot : MonoBehaviour
         IsBusy = false;
     }
 
-    public void SetTarget(Transform target)
+    public void SetTargetResource(Resource resource)
     {
         if (IsBusy)
             return;
 
-        if (target.TryGetComponent(out Resource resource))
-        {
-            _mover.SetTarget(resource.transform);
-            IsBusy = true;
-        }
+        if (resource == null)
+            return;
+
+        _mover.SetTarget(resource.transform);
+        IsBusy = true;
     }
 
-    public void SetBuildTarget(Transform target)
+    public void SetBuildTarget(BaseFlag flag)
     {
-        if (target.TryGetComponent(out BaseFlag baseFlag))
-        {
-            _mover.SetTarget(baseFlag.transform);
-            IsBusy = true;
-        }
+        if (IsBusy)
+            return;
+
+        if (flag == null)
+            return;
+
+        _mover.SetTarget(flag.transform);
+        IsBusy = true;
     }
 
     public void SetBase(Transform @base)

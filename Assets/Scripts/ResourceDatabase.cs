@@ -5,48 +5,19 @@ public class ResourceDatabase : MonoBehaviour
 {
     private readonly List<Resource> _foundResources = new();
     private readonly HashSet<Resource> _busyResources = new();
-    private readonly HashSet<BaseResourceScanner> _scanners = new();
 
-    private void OnEnable()
+    public void AddFoundResource(Resource resource)
     {
-        foreach (BaseResourceScanner scanner in _scanners)
-        {
-            scanner.ResourceFound += OnResourceFound;
-        }
-    }
-
-    private void OnDisable()
-    {
-        foreach (BaseResourceScanner scanner in _scanners)
-        {
-            scanner.ResourceFound -= OnResourceFound;
-        }
-    }
-
-    public void RegisterScanner(BaseResourceScanner scanner)
-    {
-        if (scanner == null)
-        {
+        if (resource == null)
             return;
-        }
 
-        if (_scanners.Add(scanner))
-        {
-            scanner.ResourceFound += OnResourceFound;
-        }
-    }
-
-    public void UnregisterScanner(BaseResourceScanner scanner)
-    {
-        if (scanner == null)
-        {
+        if (_foundResources.Contains(resource))
             return;
-        }
 
-        if (_scanners.Remove(scanner))
-        {
-            scanner.ResourceFound -= OnResourceFound;
-        }
+        if (_busyResources.Contains(resource))
+            return;
+
+        _foundResources.Add(resource);
     }
 
     public void ConsumeResource(Resource resource)
@@ -76,15 +47,5 @@ public class ResourceDatabase : MonoBehaviour
         }
 
         return false;
-    }
-
-    private void OnResourceFound(Resource resource)
-    {
-        if (_foundResources.Contains(resource) || _busyResources.Contains(resource))
-        {
-            return;
-        }
-
-        _foundResources.Add(resource);
     }
 }

@@ -63,6 +63,6 @@ public class BaseResourceBotDispatcher : MonoBehaviour
         if (_resourceDatabase.TryRequestResource(out Resource resource) == false)
             return;
 
-        bot.SetTarget(resource.transform);
+        bot.SetTargetResource(resource);
     }
 }

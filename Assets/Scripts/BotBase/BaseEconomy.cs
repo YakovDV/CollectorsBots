@@ -41,7 +41,10 @@ public class BaseEconomy : MonoBehaviour
 
         if (_flagPlacer.HasFlag && _base.HasEnoughBotsToBuild)
         {
-            TryBuildNewBase();
+            if (_flagPlacer.IsBaseRequested)
+            {
+                TryBuildNewBase();
+            }
         }
         else
         {

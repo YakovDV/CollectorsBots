@@ -37,7 +37,7 @@ public class BaseConstructionController : MonoBehaviour
             return false;
 
         _builderBot = bot;
-        bot.SetBuildTarget(_flagPlacer.FlagPosition);
+        bot.SetBuildTarget(_flagPlacer.CurrentFlag);
 
         return true;
     }

@@ -1032,6 +1032,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1893778650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8584834576498827433, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 3679965077715240205}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45fa8f261482c5a4cbc18d8c49ef3fc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1925033016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1157,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2533706655799456431, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
+        type: 3}
+      propertyPath: _minimumFlagDistance
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 4662000832309483406, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
         type: 3}
       propertyPath: _selfInitialize
@@ -1155,6 +1172,11 @@ PrefabInstance:
       propertyPath: _resourceDatabase
       value: 
       objectReference: {fileID: 1795067126}
+    - target: {fileID: 4662000832309483406, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
+        type: 3}
+      propertyPath: _resourceDetectionHandler
+      value: 
+      objectReference: {fileID: 1893778650}
     - target: {fileID: 5160097829172037001, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
         type: 3}
       propertyPath: _spawner
@@ -1165,11 +1187,6 @@ PrefabInstance:
       propertyPath: _resourceDatabase
       value: 
       objectReference: {fileID: 1795067126}
-    - target: {fileID: 5160097829172037001, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
-        type: 3}
-      propertyPath: _terrainLayerMask.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 5581737563784845152, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
         type: 3}
       propertyPath: m_Name
@@ -1180,6 +1197,16 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 330585545}
+    - target: {fileID: 8146814272970743195, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8146814272970743195, guid: 1ce9e8a389bd1684bbff22336b7f10fe,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

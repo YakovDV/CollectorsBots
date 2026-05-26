@@ -8,17 +8,19 @@ public class BaseFlagPlacer : MonoBehaviour
     [SerializeField] private float _minimumFlagDistance = 10f;
     [SerializeField] private ParticleSystem _badPositionEffect;
 
-    private BaseFlag _currentFlag;
+    public bool HasFlag => CurrentFlag != null;
 
-    public bool HasFlag => _currentFlag != null;
-
-    public Transform FlagPosition => _currentFlag.transform;
+    public Transform FlagPosition => CurrentFlag.transform;
 
     public event Action FlagChanged;
 
+    public BaseFlag CurrentFlag {  get; private set; }
+
+    public bool IsBaseRequested { get; private set; }
+
     public void PlaceFlag(Vector3 flagPosition, Vector3 basePosition)
     {
-        if ((flagPosition - basePosition).sqrMagnitude <= _minimumFlagDistance * 2)
+        if ((flagPosition - basePosition).sqrMagnitude <= _minimumFlagDistance * _minimumFlagDistance)
         {
             ParticleSystem particleSystem = Instantiate(_badPositionEffect, flagPosition +Vector3.up, Quaternion.identity);
             particleSystem.Play();
@@ -28,13 +30,14 @@ public class BaseFlagPlacer : MonoBehaviour
             return;
         }
 
-        if (_currentFlag == null)
+        if (CurrentFlag == null)
         {
-            _currentFlag = Instantiate(_flagPrefab, flagPosition, Quaternion.identity);
+            CurrentFlag = Instantiate(_flagPrefab, flagPosition, Quaternion.identity);
+            IsBaseRequested = true;
         }
         else
         {
-            _currentFlag.transform.position = flagPosition;
+            CurrentFlag.transform.position = flagPosition;
         }
 
         FlagChanged.Invoke();
@@ -42,10 +45,11 @@ public class BaseFlagPlacer : MonoBehaviour
 
     public void RemoveFlag()
     {
-        if (_currentFlag == null)
+        if (CurrentFlag == null)
             return;
 
-        Destroy(_currentFlag.gameObject);
-        _currentFlag = null;
+        Destroy(CurrentFlag.gameObject);
+        CurrentFlag = null;
+        IsBaseRequested = false;
     }
 }

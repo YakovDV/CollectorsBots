@@ -1038,7 +1038,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 150
+      scalar: 60
       minScalar: 1
       maxCurve:
         serializedVersion: 2

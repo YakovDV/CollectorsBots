@@ -14,16 +14,6 @@ public class Wallet : MonoBehaviour
         Value = 0;
     }
 
-    private void OnEnable()
-    {
-        _resourceCollector.ResourceCollected += AddValue;
-    }
-
-    private void OnDisable()
-    {
-        _resourceCollector.ResourceCollected -= AddValue;
-    }
-
     public bool CanSpend(int amount)
     {
         return amount >= 0 && Value >= amount;
@@ -43,9 +33,12 @@ public class Wallet : MonoBehaviour
         return true;
     }
 
-    private void AddValue()
+    public void AddValue(int amount)
     {
-        Value++;
+        if (amount <= 0)
+            return;
+
+        Value += amount;
         ValueChanged?.Invoke(Value);
     }
 }

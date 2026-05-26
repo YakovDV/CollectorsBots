@@ -3,6 +3,7 @@ using UnityEngine;
 public class Base : MonoBehaviour
 {
     [SerializeField] private ResourceDatabase _resourceDatabase;
+    [SerializeField] private ResourceDetectionHandler _resourceDetectionHandler;
     [SerializeField] private BaseResourceScanner _scanner;
 
     [SerializeField] private BaseBotsDatabase _botsDatabase;
@@ -41,12 +42,6 @@ public class Base : MonoBehaviour
         StopWork();
     }
 
-    private void OnDestroy()
-    {
-        if (_resourceDatabase != null)
-            _resourceDatabase.UnregisterScanner(_scanner);
-    }
-
     public void Initialize(ResourceDatabase resourceDatabase, BaseBuilder baseBuilder, int initialBotsCount)
     {
         if (_isInitialized)
@@ -56,8 +51,7 @@ public class Base : MonoBehaviour
         _builder = baseBuilder;
         _isInitialized = true;
 
-        _resourceDatabase.RegisterScanner(_scanner);
-
+        _resourceDetectionHandler.SetResourceDatabase(_resourceDatabase);
         _resourceDeliveryHandler.SetResourceDatabase(_resourceDatabase);
         _resourceDispatcher.SetResourceDatabase(_resourceDatabase);
         _constructionController.SetBaseBuilder(_builder);

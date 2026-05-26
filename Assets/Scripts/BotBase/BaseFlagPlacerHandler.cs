@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class BaseFlagPlacerHandler : MonoBehaviour
 {
-    private const string SelectButtonName = "Select";
-
+    [SerializeField] private PlayerInput _input;
     [SerializeField] private Camera _camera;
     [SerializeField] private LayerMask _baseLayerMask;
     [SerializeField] private LayerMask _mapLayerMask;
@@ -17,23 +16,29 @@ public class BaseFlagPlacerHandler : MonoBehaviour
             _camera = Camera.main;
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetButtonDown(SelectButtonName))
+        _input.SelectClicked += OnSelectClicked;
+    }
+
+    private void OnDisable()
+    {
+        _input.SelectClicked -= OnSelectClicked;
+    }
+
+    private void OnSelectClicked(Vector2 screenPosition)
+    {
+        Ray ray = _camera.ScreenPointToRay(screenPosition);
+
+        if (_selectedBase != null)
         {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-            if (_selectedBase != null)
-            {
-                TryPlaceFlag(ray);
-            }
-
-            if (TrySelectBase(ray))
-            {
-                return;
-            }
+            TryPlaceFlag(ray);
         }
 
+        if (TrySelectBase(ray))
+        {
+            return;
+        }
     }
 
     private bool TrySelectBase(Ray ray)

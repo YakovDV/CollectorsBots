@@ -266,6 +266,143 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 0}
+--- !u!1 &1761551406991797955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8409747710543810502}
+  - component: {fileID: 7181953117998331151}
+  m_Layer: 9
+  m_Name: ResourceDeliveryHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8409747710543810502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761551406991797955}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1409699469144246880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7181953117998331151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761551406991797955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30aa8c0fe4dec641a0cd76adf3ffb43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collector: {fileID: 3151531136872959659}
+--- !u!1 &3004394083196656512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4110999171453712118}
+  - component: {fileID: 107531667734931471}
+  m_Layer: 9
+  m_Name: BaseBotsController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4110999171453712118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3004394083196656512}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.19, y: -0.24000001, z: 1.82}
+  m_LocalScale: {x: 1.9040002, y: 0.2, z: 1.7200001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1409699469144246880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &107531667734931471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3004394083196656512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee85ee774c53c640bbc4c33d2ea2d87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawner: {fileID: 0}
+  _botsDatabase: {fileID: 5564840232872551351}
+  _resourceCollector: {fileID: 3151531136872959659}
+  _spawnZone: {fileID: 8143187295098458230}
+--- !u!1 &4156888828275992155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 944264412579025030}
+  - component: {fileID: 5564840232872551351}
+  m_Layer: 9
+  m_Name: BotsDatabase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &944264412579025030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156888828275992155}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1409699469144246880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5564840232872551351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156888828275992155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064d9485c261f9e4e90be8e42d811d1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5581737563784845152
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,9 +441,14 @@ Transform:
   - {fileID: 1492254334105609686}
   - {fileID: 5028938793342988128}
   - {fileID: 8146814272970743195}
+  - {fileID: 4110999171453712118}
   - {fileID: 8143187295098458230}
   - {fileID: 7255598387228784025}
   - {fileID: 1211564536727644482}
+  - {fileID: 944264412579025030}
+  - {fileID: 8409747710543810502}
+  - {fileID: 6578560635585240224}
+  - {fileID: 8938568619487539416}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6012622386758183002
@@ -344,12 +486,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resourceDatabase: {fileID: 0}
   _scanner: {fileID: 4757741978817351703}
-  _spawner: {fileID: 433987348822386535}
-  _collector: {fileID: 3151531136872959659}
-  _flagPlacer: {fileID: 2533706655799456431}
-  _minBotsToBuildBase: 1
+  _botsDatabase: {fileID: 5564840232872551351}
+  _botsController: {fileID: 107531667734931471}
+  _resourceDeliveryHandler: {fileID: 7181953117998331151}
+  _resourceDispatcher: {fileID: 7937451219332953184}
+  _constructionController: {fileID: 1219439371321319763}
   _builder: {fileID: 5160097829172037001}
-  _botsSendFrequency: 5
   _selfInitialize: 0
   _initialBotCount: 3
 --- !u!114 &2533706655799456431
@@ -382,11 +524,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basePrefab: {fileID: 4662000832309483406}
-  _initialBotsCount: 0
   _resourceDatabase: {fileID: 0}
+  _spawner: {fileID: 0}
+  _initialBotsCount: 0
   _terrainLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _rayLenght: 5
   _baseYOffset: 2
 --- !u!114 &522002448060652359
@@ -406,6 +549,54 @@ MonoBehaviour:
   _flagPlacer: {fileID: 2533706655799456431}
   _botCost: 3
   _baseCost: 5
+--- !u!1 &6406830371426549222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8938568619487539416}
+  - component: {fileID: 1219439371321319763}
+  m_Layer: 9
+  m_Name: BaseConstructionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8938568619487539416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6406830371426549222}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1409699469144246880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1219439371321319763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6406830371426549222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d74f553b5b09ffb49a41f4d98934be2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _botsDatabase: {fileID: 5564840232872551351}
+  _botsController: {fileID: 107531667734931471}
+  _flagPlacer: {fileID: 2533706655799456431}
+  _minBotsToBuildBase: 2
 --- !u!1 &6542383589875093133
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +760,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _resourceCollector: {fileID: 3151531136872959659}
+--- !u!1 &8701499315534327591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6578560635585240224}
+  - component: {fileID: 7937451219332953184}
+  m_Layer: 9
+  m_Name: ResourceDispatcher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6578560635585240224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8701499315534327591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1409699469144246880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7937451219332953184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8701499315534327591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a0d9aae0a58ef44ac850c39bc4d310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _botsDatabase: {fileID: 5564840232872551351}
+  _constructionController: {fileID: 1219439371321319763}
+  _sendFrequency: 5
 --- !u!1 &8996930289095849236
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,7 +817,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8143187295098458230}
   - component: {fileID: 8037048566833248230}
-  - component: {fileID: 433987348822386535}
   m_Layer: 9
   m_Name: BotSpawnZone
   m_TagString: Untagged
@@ -623,21 +860,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: -0.113961816}
---- !u!114 &433987348822386535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8996930289095849236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01d4ff2f44a573e4aae43273804563cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _botPool: {fileID: 0}
-  _spawnZone: {fileID: 8143187295098458230}
-  _collector: {fileID: 3151531136872959659}
 --- !u!1001 &906224487018094665
 PrefabInstance:
   m_ObjectHideFlags: 0

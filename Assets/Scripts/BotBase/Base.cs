@@ -1,26 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Base : MonoBehaviour
 {
     [SerializeField] private ResourceDatabase _resourceDatabase;
     [SerializeField] private BaseResourceScanner _scanner;
-    [SerializeField] private BotSpawner _spawner;
-    [SerializeField] private BaseResourceCollector _collector;
-    [SerializeField] private BaseFlagPlacer _flagPlacer;
-    [SerializeField] private int _minBotsToBuildBase = 2;
+
+    [SerializeField] private BaseBotsDatabase _botsDatabase;
+    [SerializeField] private BaseBotsController _botsController;
+
+    [SerializeField] private BaseResourceDeliveryHandler _resourceDeliveryHandler;
+    [SerializeField] private BaseResourceBotDispatcher _resourceDispatcher;
+    [SerializeField] private BaseConstructionController _constructionController;
+
     [SerializeField] private BaseBuilder _builder;
-    [SerializeField] private float _botsSendFrequency = 5f;
     [SerializeField] private bool _selfInitialize = false;
     [SerializeField] private int _initialBotCount = 3;
 
     private bool _isInitialized;
-    private CollectorBot _builderBot;
 
-    private Coroutine _sendingBots;
-
-    public bool HasEnoughBotsToBuild => _spawner.CurrentBotsCount >= _minBotsToBuildBase;
+    public bool HasEnoughBotsToBuild => _constructionController.HasEnoughBotsToBuild;
 
     private void Start()
     {
@@ -60,112 +58,59 @@ public class Base : MonoBehaviour
 
         _resourceDatabase.RegisterScanner(_scanner);
 
+        _resourceDeliveryHandler.SetResourceDatabase(_resourceDatabase);
+        _resourceDispatcher.SetResourceDatabase(_resourceDatabase);
+        _constructionController.SetBaseBuilder(_builder);
+
         StartWork();
 
         if (initialBotsCount > 0)
         {
-            _spawner.SpawnInitialBots(initialBotsCount);
+            _botsController.SpawnInitialBots(initialBotsCount);
         }
     }
 
     public void RequestNewBot()
     {
-        _spawner.SpawnBot();
+        _botsController.RequestNewBot();
     }
 
-    public void AddBotToSpawner(CollectorBot bot)
+    public void AddBotToBase(CollectorBot bot)
     {
-        _spawner.AddBot(bot);
+        _botsController.AddBot(bot);
     }
 
     public bool TrySendBuilderBot()
     {
-        if (_flagPlacer.HasFlag == false)
-            return false;
-
-        if (_builderBot != null)
-            return false;
-
-        if (_spawner.TryGetFreeBot(out CollectorBot bot) == false)
-            return false;
-
-        _builderBot = bot;
-        bot.SetBuildTarget(_flagPlacer.FlagPosition);
-
-        return true;
+        return _constructionController.TrySendBuilderBot();
     }
 
     private void StartWork()
     {
-        _spawner.BotSpawned -= OnBotSpawned;
-        _spawner.BotSpawned += OnBotSpawned;
+        _botsDatabase.BotAdded -= OnBotAdded;
+        _botsDatabase.BotAdded += OnBotAdded;
 
-        foreach (CollectorBot bot in _spawner.GetAllBots())
+        foreach (CollectorBot bot in _botsDatabase.GetAllBots())
         {
             SubscribeBot(bot);
         }
 
-        if (_sendingBots == null)
-        {
-            _sendingBots = StartCoroutine(SendBotsFrequently());
-        }
+        _resourceDispatcher.StartWork();
     }
 
     private void StopWork()
     {
-        _spawner.BotSpawned -= OnBotSpawned;
+        _botsDatabase.BotAdded -= OnBotAdded;
 
-        foreach (CollectorBot bot in _spawner.GetAllBots())
+        foreach (CollectorBot bot in _botsDatabase.GetAllBots())
         {
             UnsubscribeBot(bot);
         }
 
-        if (_sendingBots != null)
-        {
-            StopCoroutine(_sendingBots);
-            _sendingBots = null;
-        }
+        _resourceDispatcher.StopWork();
     }
 
-    private IEnumerator SendBotsFrequently()
-    {
-        WaitForSeconds wait = new(_botsSendFrequency);
-
-        while (enabled)
-        {
-            SendBots();
-
-            yield return wait;
-        }
-    }
-
-    private void SendBots()
-    {
-        if (_spawner.TryGetFreeBotMultiple(out List<CollectorBot> bots) == false)
-            return;
-
-        foreach (CollectorBot bot in bots)
-        {
-            TrySendResourceBot(bot);
-        }
-    }
-
-    private void TrySendResourceBot(CollectorBot bot)
-    {
-        if (bot == _builderBot)
-        {
-            return;
-        }
-
-        if (_resourceDatabase.TryRequestResource(out Resource resource) == false)
-        {
-            return;
-        }
-
-        bot.SetTarget(resource.transform);
-    }
-
-    private void OnBotSpawned(CollectorBot bot)
+    private void OnBotAdded(CollectorBot bot)
     {
         SubscribeBot(bot);
     }
@@ -187,26 +132,12 @@ public class Base : MonoBehaviour
 
     private void OnResourceDelivered(Resource resource)
     {
-        _collector.AddResource(resource);
-        _resourceDatabase.ConsumeResource(resource);
+        _resourceDeliveryHandler.HandleResourceDelivered(resource);
     }
 
     private void OnBuildPointReached(CollectorBot bot)
     {
-        if (bot != _builderBot)
-            return;
-
-        Vector3 buildPosition = _flagPlacer.FlagPosition.transform.position;
-
-        _builderBot = null;
-
-        _flagPlacer.RemoveFlag();
-
         UnsubscribeBot(bot);
-
-        _spawner.RemoveBot(bot);
-
-        Base newBase = _builder.CreateBase(buildPosition);
-        newBase.AddBotToSpawner(bot);
+        _constructionController.HandleBuildPointReached(bot);
     }
 }

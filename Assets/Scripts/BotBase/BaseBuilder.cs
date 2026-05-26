@@ -3,8 +3,9 @@ using UnityEngine;
 public class BaseBuilder : MonoBehaviour
 {
     [SerializeField] private Base _basePrefab;
-    [SerializeField] private int _initialBotsCount = 0;
     [SerializeField] private ResourceDatabase _resourceDatabase;
+    [SerializeField] private BotSpawner _spawner;
+    [SerializeField] private int _initialBotsCount = 0;
     [SerializeField] private LayerMask _terrainLayerMask;
     [SerializeField] private float _rayLenght = 5f;
     [SerializeField] private float _baseYOffset = 2f;
@@ -15,6 +16,11 @@ public class BaseBuilder : MonoBehaviour
 
         Base newBase = Instantiate(_basePrefab, buildPoint, Quaternion.identity);
         newBase.Initialize(_resourceDatabase, this, _initialBotsCount);
+
+        if (newBase.TryGetComponent(out BaseBotsController botsController))
+        {
+            botsController.SetSpawner(_spawner);
+        }
 
         return newBase;
     }

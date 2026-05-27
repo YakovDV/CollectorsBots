@@ -15,8 +15,8 @@ public class WalletIncomeHandler : MonoBehaviour
         _collector.ResourceCollected -= OnResourceCollected;
     }
 
-    private void OnResourceCollected()
+    private void OnResourceCollected(Resource resource)
     {
-        _wallet.AddValue(1);
+        _wallet.AddValue(resource.Worth);
     }
 }

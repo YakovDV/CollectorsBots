@@ -1,44 +1,38 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseBotsDatabase : MonoBehaviour
 {
+    [SerializeField] private BotSpawner _spawner;
+    [SerializeField] private BaseResourceCollector _resourceCollector;
+    [SerializeField] private Transform _spawnZone;
+
     private readonly List<CollectorBot> _collectorBots = new();
+    private readonly List<CollectorBot> _freeCollectorBots = new();
 
     public event Action<CollectorBot> BotAdded;
 
     public int CurrentBotsCount => _collectorBots.Count;
 
+    public void SetSpawner(BotSpawner spawner)
+    {
+        _spawner = spawner;
+    }
+
     public bool TryGetFreeBot(out CollectorBot freeBot)
     {
         freeBot = null;
 
-        foreach (CollectorBot bot in _collectorBots)
+        if (_freeCollectorBots.Count > 0)
         {
-            if (bot.IsBusy == false)
-            {
-                freeBot = bot;
-                return true;
-            }
+            freeBot = _freeCollectorBots[0];
+
+            return true;
         }
 
         return false;
-    }
-
-    public bool TryGetFreeBotMultiple(out List<CollectorBot> freeBots)
-    {
-        freeBots = new List<CollectorBot>();
-
-        foreach (CollectorBot bot in _collectorBots)
-        {
-            if (bot.IsBusy == false)
-            {
-                freeBots.Add(bot);
-            }
-        }
-
-        return freeBots.Count > 0;
     }
 
     public CollectorBot RemoveBot(CollectorBot bot)
@@ -47,6 +41,9 @@ public class BaseBotsDatabase : MonoBehaviour
             return null;
 
         _collectorBots.Remove(bot);
+        _freeCollectorBots.Remove(bot);
+
+        bot.StatusChanged -= OnBotStatusChanged;
 
         return bot;
     }
@@ -59,21 +56,57 @@ public class BaseBotsDatabase : MonoBehaviour
         if (_collectorBots.Contains(bot))
             return;
 
+        bot.SetBasePosition(_resourceCollector.transform);
+
         _collectorBots.Add(bot);
+        _freeCollectorBots.Add(bot);
+
+        bot.StatusChanged += OnBotStatusChanged;
 
         BotAdded?.Invoke(bot);
     }
 
     public List<CollectorBot> GetAllBots()
     {
-        List<CollectorBot> bots = new List<CollectorBot>();
-
-        foreach (CollectorBot bot in _collectorBots)
-        {
-            bots.Add(bot);
-        }
-
-        return bots;
+        return _collectorBots.ToList();
     }
 
+    public void SpawnInitialBots(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            CreateNewBot();
+        }
+    }
+
+    public CollectorBot CreateNewBot()
+    {
+        Vector3 spawnPosition = CalculateRandomSpawnPoint();
+
+        CollectorBot bot = _spawner.SpawnNewBot(spawnPosition);
+
+        AddBot(bot);
+
+        return bot;
+    }
+
+    private Vector3 CalculateRandomSpawnPoint()
+    {
+        Vector3 point = new(UnityEngine.Random.Range(-0.5f, 0.5f), 0f, UnityEngine.Random.Range(-0.5f, 0.5f));
+
+        return _spawnZone.TransformPoint(point);
+    }
+
+    private void OnBotStatusChanged(CollectorBot bot, bool isBusy)
+    {
+        if (isBusy == false)
+        {
+            if (_freeCollectorBots.Contains(bot) == false)
+                _freeCollectorBots.Add(bot);
+        }
+        else
+        {
+            _freeCollectorBots.Remove(bot);
+        }
+    }
 }

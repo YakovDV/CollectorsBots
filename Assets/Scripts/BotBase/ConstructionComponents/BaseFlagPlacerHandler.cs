@@ -35,10 +35,7 @@ public class BaseFlagPlacerHandler : MonoBehaviour
             TryPlaceFlag(ray);
         }
 
-        if (TrySelectBase(ray))
-        {
-            return;
-        }
+        TrySelectBase(ray);
     }
 
     private bool TrySelectBase(Ray ray)

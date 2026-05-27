@@ -28,7 +28,6 @@ public class ResourceDetectionHandler : MonoBehaviour
 
     private void SubscribeScanner()
     {
-        _scanner.ResourceFound -= OnResourceFound;
         _scanner.ResourceFound += OnResourceFound;
     }
 

@@ -2,86 +2,60 @@ using UnityEngine;
 
 public class Base : MonoBehaviour
 {
-    [SerializeField] private ResourceDatabase _resourceDatabase;
-    [SerializeField] private ResourceDetectionHandler _resourceDetectionHandler;
+    [SerializeField] private BaseResourceCollector _collector;
     [SerializeField] private BaseResourceScanner _scanner;
+    [SerializeField] private ResourceDetectionHandler _resourceDetectionHandler;
 
     [SerializeField] private BaseBotsDatabase _botsDatabase;
-    [SerializeField] private BaseBotsController _botsController;
 
-    [SerializeField] private BaseResourceDeliveryHandler _resourceDeliveryHandler;
     [SerializeField] private BaseResourceBotDispatcher _resourceDispatcher;
-    [SerializeField] private BaseConstructionController _constructionController;
+    [SerializeField] private BaseConstruction _baseConstruction;
 
-    [SerializeField] private BaseBuilder _builder;
-    [SerializeField] private bool _selfInitialize = false;
-    [SerializeField] private int _initialBotCount = 3;
+    [SerializeField] private BaseSpawner _baseSpawner;
 
+    private ResourceDatabase _resourceDatabase;
     private bool _isInitialized;
 
-    public bool HasEnoughBotsToBuild => _constructionController.HasEnoughBotsToBuild;
+    public bool HasEnoughBotsToBuild => _baseConstruction.HasEnoughBotsToBuild;
 
-    private void Start()
-    {
-        if (_selfInitialize)
-        {
-            Initialize(_resourceDatabase, _builder, _initialBotCount);
-        }
-    }
-
-    private void OnEnable()
-    {
-        if (_isInitialized == false)
-            return;
-
-        StartWork();
-    }
-
-    private void OnDisable()
-    {
-        StopWork();
-    }
-
-    public void Initialize(ResourceDatabase resourceDatabase, BaseBuilder baseBuilder, int initialBotsCount)
+    public void Initialize(ResourceDatabase resourceDatabase, BaseSpawner baseSpawner, int initialBotsCount)
     {
         if (_isInitialized)
             return;
 
         _resourceDatabase = resourceDatabase;
-        _builder = baseBuilder;
+        _baseSpawner = baseSpawner;
         _isInitialized = true;
 
-        _resourceDetectionHandler.SetResourceDatabase(_resourceDatabase);
-        _resourceDeliveryHandler.SetResourceDatabase(_resourceDatabase);
         _resourceDispatcher.SetResourceDatabase(_resourceDatabase);
-        _constructionController.SetBaseBuilder(_builder);
+        _resourceDetectionHandler.SetResourceDatabase(resourceDatabase);
+        _baseConstruction.SetBaseBuilder(_baseSpawner);
 
         StartWork();
 
         if (initialBotsCount > 0)
         {
-            _botsController.SpawnInitialBots(initialBotsCount);
+            _botsDatabase.SpawnInitialBots(initialBotsCount);
         }
     }
 
     public void RequestNewBot()
     {
-        _botsController.RequestNewBot();
+        _botsDatabase.CreateNewBot();
     }
 
     public void AddBotToBase(CollectorBot bot)
     {
-        _botsController.AddBot(bot);
+        _botsDatabase.AddBot(bot);
     }
 
     public bool TrySendBuilderBot()
     {
-        return _constructionController.TrySendBuilderBot();
+        return _baseConstruction.TrySendBuilderBot();
     }
 
     private void StartWork()
     {
-        _botsDatabase.BotAdded -= OnBotAdded;
         _botsDatabase.BotAdded += OnBotAdded;
 
         foreach (CollectorBot bot in _botsDatabase.GetAllBots())
@@ -92,18 +66,6 @@ public class Base : MonoBehaviour
         _resourceDispatcher.StartWork();
     }
 
-    private void StopWork()
-    {
-        _botsDatabase.BotAdded -= OnBotAdded;
-
-        foreach (CollectorBot bot in _botsDatabase.GetAllBots())
-        {
-            UnsubscribeBot(bot);
-        }
-
-        _resourceDispatcher.StopWork();
-    }
-
     private void OnBotAdded(CollectorBot bot)
     {
         SubscribeBot(bot);
@@ -111,10 +73,7 @@ public class Base : MonoBehaviour
 
     private void SubscribeBot(CollectorBot bot)
     {
-        bot.ResourceDelivered -= OnResourceDelivered;
         bot.ResourceDelivered += OnResourceDelivered;
-
-        bot.BuildPointReached -= OnBuildPointReached;
         bot.BuildPointReached += OnBuildPointReached;
     }
 
@@ -126,12 +85,21 @@ public class Base : MonoBehaviour
 
     private void OnResourceDelivered(Resource resource)
     {
-        _resourceDeliveryHandler.HandleResourceDelivered(resource);
+        HandleResourceDelivered(resource);
     }
 
     private void OnBuildPointReached(CollectorBot bot)
     {
         UnsubscribeBot(bot);
-        _constructionController.HandleBuildPointReached(bot);
+        _baseConstruction.HandleBuildPointReached(bot);
+    }
+
+    private void HandleResourceDelivered(Resource resource)
+    {
+        if (resource == null)
+            return;
+
+        _collector.AddResource(resource);
+        _resourceDatabase.ConsumeResource(resource);
     }
 }

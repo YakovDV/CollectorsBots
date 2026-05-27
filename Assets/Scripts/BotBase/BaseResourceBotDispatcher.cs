@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseResourceBotDispatcher : MonoBehaviour
 {
     [SerializeField] private BaseBotsDatabase _botsDatabase;
-    [SerializeField] private BaseConstructionController _constructionController;
+    [SerializeField] private BaseConstruction _constructionController;
     [SerializeField] private float _sendFrequency = 5f;
 
     private ResourceDatabase _resourceDatabase;
@@ -46,23 +45,23 @@ public class BaseResourceBotDispatcher : MonoBehaviour
 
     private void SendBots()
     {
-        if (_botsDatabase.TryGetFreeBotMultiple(out List<CollectorBot> bots))
+        while (_botsDatabase.TryGetFreeBot(out CollectorBot freeBot))
         {
-            foreach (CollectorBot bot in bots)
-            {
-                TrySendResourceBot(bot);
-            }
+            if (TrySendResourceBot(freeBot) == false)
+                return;
         }
     }
 
-    private void TrySendResourceBot(CollectorBot bot)
+    private bool TrySendResourceBot(CollectorBot bot)
     {
         if (_constructionController.IsBuilderBot(bot))
-            return;
+            return false;
 
         if (_resourceDatabase.TryRequestResource(out Resource resource) == false)
-            return;
+            return false;
 
         bot.SetTargetResource(resource);
+
+        return true;
     }
 }

@@ -2,18 +2,17 @@ using UnityEngine;
 
 public class BotSpawner : MonoBehaviour
 {
-    [SerializeField] private BotPool _botPool;
+    [SerializeField] private CollectorBot _prefab;
 
     public CollectorBot SpawnNewBot(Vector3 spawnPosition)
     {
-        CollectorBot bot = _botPool.GetObject();
-        bot.transform.position = spawnPosition;
+        CollectorBot bot = Instantiate(_prefab, spawnPosition, Quaternion.identity);
 
         return bot;
     }
 
-    public void RemoveBot(CollectorBot bot)
+    public void DestroyBot(CollectorBot bot)
     {
-        _botPool.ReleaseObject(bot);
+        Destroy(bot.gameObject);
     }
 }

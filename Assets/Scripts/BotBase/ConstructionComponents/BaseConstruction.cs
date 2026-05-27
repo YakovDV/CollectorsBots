@@ -1,18 +1,18 @@
 using UnityEngine;
 
-public class BaseConstructionController : MonoBehaviour
+public class BaseConstruction : MonoBehaviour
 {
     [SerializeField] private BaseBotsDatabase _botsDatabase;
-    [SerializeField] private BaseBotsController _botsController;
     [SerializeField] private BaseFlagPlacer _flagPlacer;
     [SerializeField] private int _minBotsToBuildBase = 2;
+    [SerializeField] private int _newBaseInitialBotsCount = 0;
 
-    private BaseBuilder _builder;
+    private BaseSpawner _builder;
     private CollectorBot _builderBot;
 
     public bool HasEnoughBotsToBuild => _botsDatabase.CurrentBotsCount >= _minBotsToBuildBase;
 
-    public void SetBaseBuilder(BaseBuilder builder)
+    public void SetBaseBuilder(BaseSpawner builder)
     {
         _builder = builder;
     }
@@ -53,9 +53,9 @@ public class BaseConstructionController : MonoBehaviour
 
         _flagPlacer.RemoveFlag();
 
-        _botsController.RemoveBot(bot);
+        _botsDatabase.RemoveBot(bot);
 
-        Base newBase = _builder.CreateBase(buildPosition);
+        Base newBase = _builder.CreateBase(buildPosition, _newBaseInitialBotsCount);
         newBase.AddBotToBase(bot);
     }
 }

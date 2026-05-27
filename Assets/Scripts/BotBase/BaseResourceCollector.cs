@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BaseResourceCollector : MonoBehaviour
 {
-    public event Action ResourceCollected;
+    public event Action<Resource> ResourceCollected;
 
     public void AddResource(Resource resource)
     {
@@ -12,6 +12,6 @@ public class BaseResourceCollector : MonoBehaviour
             return;
         }
 
-        ResourceCollected?.Invoke();
+        ResourceCollected?.Invoke(resource);
     }
 }

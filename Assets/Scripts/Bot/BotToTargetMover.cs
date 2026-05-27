@@ -9,7 +9,6 @@ public class BotToTargetMover : MonoBehaviour
     [SerializeField] private float _targetReachedDistance = 1f;
 
     private Transform _target;
-    private Vector3 _direction;
     private Rigidbody _rigidbody;
 
     public event Action<Transform> TargetReached;
@@ -23,8 +22,10 @@ public class BotToTargetMover : MonoBehaviour
     {
         if (_target != null)
         {
-            SetDirection();
-            MoveForward();
+            Vector3 direction = SetDirection(_target.transform.position);
+
+            SetRotation(direction);
+            MoveForward(direction);
 
             Vector3 distance = _target.position - transform.position;
 
@@ -36,8 +37,6 @@ public class BotToTargetMover : MonoBehaviour
                 _rigidbody.velocity = Vector3.zero;
 
                 TargetReached?.Invoke(reachedTarget);
-
-                return;
             }
         }
     }
@@ -47,21 +46,21 @@ public class BotToTargetMover : MonoBehaviour
         _target = target;
     }
 
-    private void SetDirection()
+    private Vector3 SetDirection(Vector3 targetPosition)
     {
-        _direction = (_target.transform.position - transform.position).normalized;
+        Vector3 direction = (targetPosition - transform.position).normalized;
 
-        SetRotation();
+        return direction;
     }
 
-    private void SetRotation()
+    private void SetRotation(Vector3 direction)
     {
-        transform.rotation = Quaternion.LookRotation(_direction);
+        transform.rotation = Quaternion.LookRotation(direction);
     }
 
-    private void MoveForward()
+    private void MoveForward(Vector3 direction)
     {
-        Vector3 velocity = _direction * _speed;
+        Vector3 velocity = direction * _speed;
         velocity.y = _rigidbody.velocity.y;
 
         _rigidbody.velocity = velocity;
